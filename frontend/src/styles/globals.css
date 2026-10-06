@@ -1,0 +1,292 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+/* Instrument Sans, variable in weight (400–700) *and* width (75–100%): the
+ * width axis is what gives display moments their condensed voice without a
+ * second family. */
+@import '@fontsource-variable/instrument-sans/standard.css';
+
+@import './tokens.css';
+
+/* Dark mode is driven by a class on <html>, not by the OS, so the app can
+ * default to dark and still expose an explicit user preference later. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ===========================================================================
+ * LAYER 3 — TAILWIND THEME
+ * `@theme inline` publishes the semantic tokens as utilities. Because the
+ * values are `var()` references, `bg-surface` resolves through whichever theme
+ * class is active — one class list, both themes.
+ * ======================================================================== */
+
+@theme inline {
+  /* --- Colour ------------------------------------------------------------ */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-heading: var(--heading);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
+
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-overlay: var(--overlay);
+
+  --color-border: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-subtle: var(--primary-subtle);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-subtle: var(--accent-subtle);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-risk-low: var(--risk-low);
+  --color-risk-low-surface: var(--risk-low-surface);
+  --color-risk-moderate: var(--risk-moderate);
+  --color-risk-moderate-surface: var(--risk-moderate-surface);
+  --color-risk-high: var(--risk-high);
+  --color-risk-high-surface: var(--risk-high-surface);
+  --color-risk-unknown: var(--risk-unknown);
+  --color-risk-unknown-surface: var(--risk-unknown-surface);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-ai-surface: var(--ai-surface);
+  --color-ai-border: var(--ai-border);
+  --color-ai-accent: var(--ai-accent);
+  --color-ai-foreground: var(--ai-foreground);
+
+  --color-rail: var(--rail);
+  --color-rail-foreground: var(--rail-foreground);
+  --color-rail-heading: var(--rail-heading);
+  --color-rail-muted: var(--rail-muted);
+  --color-rail-hover: var(--rail-hover);
+  --color-rail-active: var(--rail-active);
+  --color-rail-border: var(--rail-border);
+
+  /* --- Typography ------------------------------------------------------
+   * One family. A ~1.25 modular scale from a 15px body, set in rem so browser
+   * font-size settings are respected. Display sizes are meant to be used with
+   * the `type-display` utility (condensed width, tight tracking); body sizes
+   * stay at full width for reading. */
+  --font-sans:
+    'Instrument Sans Variable', 'Instrument Sans', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', sans-serif;
+
+  --text-display: 3.5rem; /* 56 / 60 · empty-state headline */
+  --text-display--line-height: 3.75rem;
+  --text-h1: 2.5rem; /* 40 / 44 · destination name */
+  --text-h1--line-height: 2.75rem;
+  --text-h2: 1.75rem; /* 28 / 34 · page titles */
+  --text-h2--line-height: 2.125rem;
+  --text-h3: 1.3125rem; /* 21 / 28 · section titles */
+  --text-h3--line-height: 1.75rem;
+  --text-h4: 1.0625rem; /* 17 / 24 · sub-headings */
+  --text-h4--line-height: 1.5rem;
+  --text-body-lg: 1.0625rem; /* 17 / 28 · reading text */
+  --text-body-lg--line-height: 1.75rem;
+  --text-body: 0.9375rem; /* 15 / 24 · default */
+  --text-body--line-height: 1.5rem;
+  --text-body-sm: 0.8125rem; /* 13 / 20 · secondary */
+  --text-body-sm--line-height: 1.25rem;
+  --text-caption: 0.75rem; /* 12 / 16 · metadata */
+  --text-caption--line-height: 1rem;
+  --text-metric-lg: 4rem; /* 64 / 64 · the trip score */
+  --text-metric-lg--line-height: 4rem;
+  --text-metric: 1.75rem; /* 28 / 32 · card metrics */
+  --text-metric--line-height: 2rem;
+
+  /* --- Spacing (FDS §9.4) -----------------------------------------------
+   * 4px base. Tailwind's numeric scale multiplies this, so `p-6` is exactly
+   * --space-6 (24px) and no parallel scale is needed. */
+  --spacing: 0.25rem;
+
+  /* --- Radius — hierarchy, not one value everywhere: chips are pills,
+   * controls 10px, inner panels 14px, top-level workspace panels 20px. ----- */
+  --radius-sm: 0.5rem; /* 8 · small controls, icon tiles */
+  --radius-md: 0.625rem; /* 10 · buttons, inputs */
+  --radius-lg: 0.875rem; /* 14 · inner panels */
+  --radius-xl: 1.25rem; /* 20 · workspace panels, modals */
+
+  /* --- Shadow (FDS §9.6) ------------------------------------------------- */
+  --shadow-xs: var(--elevation-xs);
+  --shadow-sm: var(--elevation-sm);
+  --shadow-md: var(--elevation-md);
+  --shadow-lg: var(--elevation-lg);
+
+  /* --- Breakpoints (FDS §9.5) -------------------------------------------
+   * The FDS names four bands; Tailwind is mobile-first, so the unprefixed
+   * base *is* the FDS `sm` band and the prefixes line up one-to-one:
+   *   (none) → sm  <640    md: → 640    lg: → 1024    xl: → 1280
+   * Tailwind's own `sm` and `2xl` are removed so nothing can accidentally
+   * introduce a fifth band the design does not define. */
+  --breakpoint-sm: initial;
+  --breakpoint-md: 40rem; /* 640 */
+  --breakpoint-lg: 64rem; /* 1024 */
+  --breakpoint-xl: 80rem; /* 1280 */
+  --breakpoint-2xl: initial;
+
+  /* Max content width (FDS §9.5) */
+  --container-content: 80rem; /* 1280 */
+
+  /* --- Easing ------------------------------------------------------------ */
+  --ease-out-soft: var(--motion-ease-out);
+  --ease-standard: var(--motion-ease-standard);
+}
+
+/* ===========================================================================
+ * BASE
+ * ======================================================================== */
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* The app is a full-height flex shell whose inner regions scroll on their
+     * own. Any horizontal travel belongs to one of those regions (the day
+     * strip), never to the document — without this a scroll container's own
+     * children still widen the page at 390px. */
+    overflow-x: hidden;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--color-heading);
+    text-wrap: balance;
+  }
+
+  /* Focus is always visible under keyboard navigation and suppressed for the
+   * mouse — never removed outright (FDS §11.3). */
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+
+  /* Scores, temperatures and percentages must not jitter while animating. */
+  [data-numeric],
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::placeholder {
+    color: var(--color-subtle-foreground);
+  }
+
+  ::selection {
+    background: var(--color-primary-subtle);
+    color: var(--color-heading);
+  }
+}
+
+/* ===========================================================================
+ * REDUCED MOTION (FDS §11.9)
+ * No translation or scale; opacity transitions capped at 100ms. Framer Motion
+ * variants honour the same preference in JS via `usePrefersReducedMotion`, so
+ * information is never carried by motion alone.
+ * ======================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 100ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* The same suppression, driven by the Settings toggle rather than the OS.
+ * Additive to the media query above, never subtractive: a user whose system
+ * asks for reduced motion keeps it regardless of this setting. */
+:root[data-reduced-motion='reduce'] *,
+:root[data-reduced-motion='reduce'] *::before,
+:root[data-reduced-motion='reduce'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 100ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* ===========================================================================
+ * UTILITIES
+ * ======================================================================== */
+
+/* The condensed display voice: destination names, the trip score, the
+ * empty-state headline. Width does the work weight usually does, so display
+ * text stays elegant at large sizes instead of shouting. */
+@utility type-display {
+  font-stretch: 80%;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Thin scrollbars inside scroll regions (the transcript, the forecast
+ * ribbon), so a region's scroll affordance never outweighs its content. */
+@utility scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+
+@utility focus-ring {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Skip link — first focusable element on the dashboard (FDS §14.2). Visually
+ * hidden until focused, then anchored top-left. */
+@utility skip-link {
+  position: absolute;
+  left: --spacing(4);
+  top: --spacing(4);
+  z-index: 100;
+  transform: translateY(-200%);
+  transition: transform var(--motion-fast) var(--motion-ease-out);
+
+  &:focus-visible {
+    transform: translateY(0);
+  }
+}
+
+/* A single sweeping bar inside a hairline track — `TypingIndicator`'s
+ * "computing", not a bouncing-dots chat bubble. Capped by the
+ * `prefers-reduced-motion` rule above like every other animation here. */
+@keyframes loading-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
+}

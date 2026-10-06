@@ -1,0 +1,232 @@
+/* ===========================================================================
+ * DESIGN TOKENS — FDS §9
+ *
+ * Three layers, and the distinction matters:
+ *
+ *   1. PRIMITIVES  (--brand-500, --neutral-200, --red-400 …)
+ *      The raw palette. Theme-independent. NEVER referenced by a component.
+ *
+ *   2. SEMANTICS   (--background, --risk-high, --ai-surface …)
+ *      What a colour *means*. Redefined per theme. This is the only layer a
+ *      feature author should ever think about.
+ *
+ *   3. UTILITIES   (globals.css `@theme inline`)
+ *      Semantics exposed to Tailwind as `bg-background`, `text-risk-high`, …
+ *
+ * Adding light mode is therefore filling in layer 2 under `:root` — no
+ * component change, no utility-class change.
+ * ======================================================================== */
+
+/* Design direction — "flight deck for weather".
+ *
+ * A cool, high-altitude palette: paper-white workspace, deep navy ink (which
+ * also carries the conversation rail, so the rail reads as part of the
+ * product rather than a bolted-on sidebar), and one atmospheric cobalt
+ * accent reserved for selection, focus and the primary action. Risk colours
+ * stay strictly functional and are tuned to be told apart without relying
+ * on hue alone (every risk state also ships an icon and a word).
+ */
+
+:root {
+  /* =====================================================================
+   * LAYER 1 — PRIMITIVE PALETTE
+   * ================================================================== */
+
+  /* Ink — the navy that text, the rail and the dark theme are built from. */
+  --ink-950: #08111e;
+  --ink-900: #0e1a2b;
+  --ink-800: #17263a;
+  --ink-700: #22344c;
+  --ink-600: #3a4b62;
+  --ink-500: #56667c;
+  --ink-400: #8090a4;
+  --ink-300: #b4c0ce;
+  --ink-200: #d6dde6;
+  --ink-150: #e3e8ee;
+  --ink-100: #edf1f5;
+  --ink-50: #f4f6f9;
+  --ink-0: #ffffff;
+
+  /* Cobalt — the single accent. */
+  --cobalt-700: #1a3fb0;
+  --cobalt-600: #2350d8;
+  --cobalt-500: #3a66ea;
+  --cobalt-400: #6d8ff2;
+  --cobalt-100: #e3eafd;
+  --cobalt-50: #f0f4fe;
+
+  /* Signal hues — functional only, AA on white in their text form. */
+  --green-700: #0f6e50;
+  --green-400: #4cc79a;
+  --green-100: #e2f3eb;
+  --amber-700: #955300;
+  --amber-400: #f2b546;
+  --amber-100: #fbefd9;
+  --red-700: #b42f25;
+  --red-400: #f27c72;
+  --red-100: #fbe6e3;
+
+  /* =====================================================================
+   * LAYER 2 — SEMANTIC TOKENS · LIGHT THEME (the shipping default)
+   * ================================================================== */
+
+  --background: var(--ink-50);
+  --foreground: var(--ink-800);
+  --heading: var(--ink-900);
+  --muted: var(--ink-100);
+  --muted-foreground: var(--ink-500);
+  --subtle-foreground: var(--ink-400);
+
+  --surface: var(--ink-0);
+  --surface-raised: var(--ink-0);
+  --surface-sunken: var(--ink-100);
+  --overlay: rgb(8 17 30 / 0.45);
+
+  --border-subtle: var(--ink-150);
+  --border-strong: var(--ink-300);
+  --input: var(--ink-200);
+  --ring: var(--cobalt-600);
+
+  --primary: var(--cobalt-600);
+  --primary-hover: var(--cobalt-700);
+  --primary-active: var(--cobalt-700);
+  --primary-foreground: var(--ink-0);
+  --primary-subtle: var(--cobalt-50);
+
+  /* The accent role is the same cobalt family, lighter: one accent, not two. */
+  --accent: var(--cobalt-500);
+  --accent-hover: var(--cobalt-600);
+  --accent-foreground: var(--ink-0);
+  --accent-subtle: var(--cobalt-100);
+
+  --secondary: var(--ink-100);
+  --secondary-foreground: var(--ink-800);
+
+  --risk-low: var(--green-700);
+  --risk-low-surface: var(--green-100);
+  --risk-moderate: var(--amber-700);
+  --risk-moderate-surface: var(--amber-100);
+  --risk-high: var(--red-700);
+  --risk-high-surface: var(--red-100);
+  --risk-unknown: var(--ink-500);
+  --risk-unknown-surface: var(--ink-100);
+
+  --destructive: var(--red-700);
+  --destructive-foreground: var(--ink-0);
+
+  /* Generated text is marked by the assistant's mark, not by a tinted box —
+   * the AI tokens stay in the ink/cobalt family so a generated surface reads
+   * as part of the same product. */
+  --ai-surface: var(--cobalt-50);
+  --ai-border: var(--cobalt-100);
+  --ai-accent: var(--cobalt-600);
+  --ai-foreground: var(--ink-800);
+
+  /* The conversation rail — navy in both themes. */
+  --rail: var(--ink-900);
+  --rail-foreground: var(--ink-200);
+  --rail-heading: var(--ink-0);
+  --rail-muted: var(--ink-400);
+  --rail-hover: var(--ink-800);
+  --rail-active: var(--ink-700);
+  --rail-border: rgb(255 255 255 / 0.08);
+
+  /* Elevation — cool, low and rare. Surfaces separate by tone first. */
+  --elevation-xs: 0 1px 2px rgb(14 26 43 / 0.05);
+  --elevation-sm: 0 1px 3px rgb(14 26 43 / 0.06), 0 4px 12px rgb(14 26 43 / 0.04);
+  --elevation-md: 0 2px 6px rgb(14 26 43 / 0.06), 0 12px 28px rgb(14 26 43 / 0.08);
+  --elevation-lg: 0 8px 24px rgb(14 26 43 / 0.12), 0 24px 56px rgb(14 26 43 / 0.12);
+  --elevation-focus: 0 0 0 3px rgb(35 80 216 / 0.3);
+
+  color-scheme: light;
+}
+
+/* ===========================================================================
+ * LAYER 2 — SEMANTIC TOKENS · DARK THEME
+ * The same ink family, inverted: navy canvas, lighter cobalt.
+ * ======================================================================== */
+
+.dark {
+  --background: var(--ink-950);
+  --foreground: var(--ink-200);
+  --heading: var(--ink-0);
+  --muted: var(--ink-800);
+  --muted-foreground: var(--ink-400);
+  --subtle-foreground: var(--ink-500);
+
+  --surface: var(--ink-900);
+  --surface-raised: var(--ink-800);
+  --surface-sunken: var(--ink-950);
+  --overlay: rgb(0 0 0 / 0.6);
+
+  --border-subtle: var(--ink-800);
+  --border-strong: var(--ink-600);
+  --input: var(--ink-700);
+  --ring: var(--cobalt-400);
+
+  --primary: var(--cobalt-400);
+  --primary-hover: var(--cobalt-500);
+  --primary-active: var(--cobalt-500);
+  --primary-foreground: var(--ink-950);
+  --primary-subtle: #15244a;
+
+  --accent: var(--cobalt-400);
+  --accent-hover: var(--cobalt-500);
+  --accent-foreground: var(--ink-950);
+  --accent-subtle: #15244a;
+
+  --secondary: var(--ink-800);
+  --secondary-foreground: var(--ink-200);
+
+  --risk-low: var(--green-400);
+  --risk-low-surface: #0f2a22;
+  --risk-moderate: var(--amber-400);
+  --risk-moderate-surface: #2e2310;
+  --risk-high: var(--red-400);
+  --risk-high-surface: #33161a;
+  --risk-unknown: var(--ink-400);
+  --risk-unknown-surface: var(--ink-800);
+
+  --destructive: var(--red-400);
+  --destructive-foreground: var(--ink-950);
+
+  --ai-surface: #121f3d;
+  --ai-border: #1d2f5c;
+  --ai-accent: var(--cobalt-400);
+  --ai-foreground: var(--ink-200);
+
+  --rail: var(--ink-950);
+  --rail-foreground: var(--ink-200);
+  --rail-heading: var(--ink-0);
+  --rail-muted: var(--ink-500);
+  --rail-hover: var(--ink-900);
+  --rail-active: var(--ink-800);
+  --rail-border: var(--ink-800);
+
+  --elevation-xs: 0 1px 2px rgb(0 0 0 / 0.3);
+  --elevation-sm: 0 2px 8px rgb(0 0 0 / 0.35);
+  --elevation-md: 0 4px 16px rgb(0 0 0 / 0.45);
+  --elevation-lg: 0 12px 32px rgb(0 0 0 / 0.55);
+  --elevation-focus: 0 0 0 3px rgb(109 143 242 / 0.45);
+
+  color-scheme: dark;
+}
+
+/* ===========================================================================
+ * MOTION (FDS §11.1)
+ * Plain custom properties rather than Tailwind theme tokens, because the
+ * primary consumer is Framer Motion in TypeScript (`src/lib/animations.ts`),
+ * which reads the same numbers from `src/constants/motion.ts`. Nothing here
+ * exceeds 600ms: motion clarifies relationships, it never performs.
+ * ======================================================================== */
+
+:root {
+  --motion-instant: 100ms;
+  --motion-fast: 150ms;
+  --motion-base: 250ms;
+  --motion-slow: 400ms;
+  --motion-count: 600ms;
+
+  --motion-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+}
